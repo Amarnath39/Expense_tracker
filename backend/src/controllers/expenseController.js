@@ -76,6 +76,9 @@ export const createExpense = async (req, res) => {
     if (!title || typeof title !== 'string' || title.trim() === '') {
       return res.status(400).json({ success: false, message: 'Title is required' });
     }
+    if (!/^[a-zA-Z\s]+$/.test(title.trim())) {
+      return res.status(400).json({ success: false, message: 'Title should contain only alphabets and spaces' });
+    }
     if (!amount || isNaN(amount) || Number(amount) <= 0) {
       return res.status(400).json({ success: false, message: 'Amount must be a positive number' });
     }
@@ -113,8 +116,13 @@ export const updateExpense = async (req, res) => {
     const { title, amount, category, date, note } = req.body;
 
     // Validation
-    if (title !== undefined && (typeof title !== 'string' || title.trim() === '')) {
-      return res.status(400).json({ success: false, message: 'Title cannot be empty' });
+    if (title !== undefined) {
+      if (typeof title !== 'string' || title.trim() === '') {
+        return res.status(400).json({ success: false, message: 'Title cannot be empty' });
+      }
+      if (!/^[a-zA-Z\s]+$/.test(title.trim())) {
+        return res.status(400).json({ success: false, message: 'Title should contain only alphabets and spaces' });
+      }
     }
     if (amount !== undefined && (isNaN(amount) || Number(amount) <= 0)) {
       return res.status(400).json({ success: false, message: 'Amount must be a positive number' });

@@ -43,6 +43,8 @@ const ExpenseForm = ({ editingExpense, onSubmit, onCancel }) => {
 
     if (!formData.title.trim()) {
       newErrors.title = 'Title is required';
+    } else if (!/^[a-zA-Z\s]+$/.test(formData.title.trim())) {
+      newErrors.title = 'Title should contain only alphabets and spaces';
     }
 
     if (!formData.amount) {
@@ -96,17 +98,16 @@ const ExpenseForm = ({ editingExpense, onSubmit, onCancel }) => {
         note: formData.note.trim()
       };
 
-      let result;
       if (editingExpense) {
-        result = await expenseApi.updateExpense(editingExpense._id, expenseData);
+        const result = await expenseApi.updateExpense(editingExpense._id, expenseData);
+        if (result.success) {
+          onSubmit(result.data);
+        } else {
+          setErrors({ form: result.message || 'Failed to save expense' });
+        }
       } else {
-        result = await expenseApi.createExpense(expenseData);
-      }
-
-      if (result.success) {
-        onSubmit(result.data);
-      } else {
-        setErrors({ form: result.message || 'Failed to save expense' });
+        // For add expense, let the parent handle the API call
+        await onSubmit(expenseData);
       }
     } catch (error) {
       setErrors({ form: 'Failed to save expense. Please try again.' });

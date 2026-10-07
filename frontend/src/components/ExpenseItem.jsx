@@ -1,5 +1,3 @@
-import { expenseApi } from '../services/expenseApi';
-
 const ExpenseItem = ({ expense, onEdit, onDelete, onView }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -18,19 +16,8 @@ const ExpenseItem = ({ expense, onEdit, onDelete, onView }) => {
     }).format(amount);
   };
 
-  const handleDelete = async () => {
-    if (window.confirm('Are you sure you want to delete this expense?')) {
-      try {
-        const result = await expenseApi.deleteExpense(expense._id);
-        if (result.success) {
-          onDelete(expense._id);
-        } else {
-          alert('Failed to delete expense: ' + result.message);
-        }
-      } catch (error) {
-        alert('Failed to delete expense. Please try again.');
-      }
-    }
+  const handleDelete = () => {
+    onDelete(expense._id);
   };
 
   return (
