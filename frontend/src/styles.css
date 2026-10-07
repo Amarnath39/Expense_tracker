@@ -259,8 +259,6 @@ main {
 .total-amount {
   font-size: 2rem;
   font-weight: bold;
-  color: white;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .summary-breakdown h3 {
